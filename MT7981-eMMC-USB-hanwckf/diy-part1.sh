@@ -28,7 +28,7 @@ git clone --depth=1 https://github.com/linkease/openwrt-app-actions tmp/openwrt-
 mv tmp/openwrt-app-actions/applications/luci-app-wan-mac package/luci-app-wan-mac
 rm -rf tmp/openwrt-app-actions
 # Bandix-plus 流量监控：后端核心程序
-git clone --depth=1 https://github.com/timsaya/openwrt-bandix-plus package/openwrt-bandix-plus
+#git clone --depth=1 https://github.com/timsaya/openwrt-bandix-plus package/openwrt-bandix-plus
 
 # Bandix-plus 流量监控：LuCI前端界面
-git clone --depth=1 https://github.com/timsaya/luci-app-bandix-plus package/luci-app-bandix-plus
+#git clone --depth=1 https://github.com/timsaya/luci-app-bandix-plus package/luci-app-bandix-plus
