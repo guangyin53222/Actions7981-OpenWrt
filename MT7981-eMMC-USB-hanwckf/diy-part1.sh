@@ -21,3 +21,5 @@ git clone https://github.com/EasyTier/luci-app-easytier package/easytier
 git clone https://github.com/destan19/OpenAppFilter package/OpenAppFilter
 # istore插件
 git clone https://github.com/linkease/istore.git package/luci-app-store
+# 克隆gecoosac插件
+git clone --depth=1 https://github.com/laipeng668/luci-app-gecoosac package/luci-app-gecoosac
