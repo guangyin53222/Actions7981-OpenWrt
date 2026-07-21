@@ -69,6 +69,8 @@ on:
 #    - cron: 0 16 * * *
 
 env:
+  # 消除Node20弃用警告关键配置
+  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
   ###############手动修改##############
   ##手动设置上传时候的打包名称和tag名称UPLOAD_TAG_NAME
   OPENWRT_NAME: hanwckf
@@ -112,12 +114,7 @@ jobs:
     - name: 清理磁盘空间(Ubuntu)
       uses: jlumbroso/free-disk-space@main
       with:
-        # this might remove tools that are actually needed,
-        # when set to "true" but frees about 6 GB
         tool-cache: true
-        
-        # all of these default to true, but feel free to set to
-        # "false" if necessary for your workflow
         android: false
         dotnet: false
         haskell: false
@@ -164,9 +161,7 @@ jobs:
         cd openwrt
         SET_IP=${{ github.event.inputs.LAN_IP }}
         if [[ $SET_IP =~ ^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$ ]]; then
-            #修改immortalwrt.lan关联IP
             sed -i "s/192\.168\.[0-9]*\.[0-9]*/$SET_IP/g" $(find feeds/luci/modules/luci-mod-system -type f -name "flash.js")
-            #修改默认IP地址
             sed -i "s/192\.168\.[0-9]*\.[0-9]*/$SET_IP/g" package/base-files/files/bin/config_generate
             echo "Set LAN IP Address: $SET_IP"
         else
@@ -244,12 +239,12 @@ jobs:
         else
                 echo "EEPROM=" >> $GITHUB_ENV
         fi
-        if grep -q 'CONFIG_PACKAGE_mtwifi-cfg=y' .config; then
+        if grep -q 'CONFIG_PACKAGE_mtwifi-cfg=y'; then
                 echo "WIFI_INTERFACE=-mtwifi" >> $GITHUB_ENV
         else
                 echo "WIFI_INTERFACE=" >> $GITHUB_ENV
         fi
-        if grep -q 'CONFIG_PACKAGE_luci-app-dockerman=y' .config; then
+        if grep -q 'CONFIG_PACKAGE_luci-app-dockerman=y'; then
                 echo "BUILD_DOCKERMAN=-docker" >> $GITHUB_ENV
         else
                 echo "BUILD_DOCKERMAN=" >> $GITHUB_ENV
@@ -291,7 +286,7 @@ jobs:
         name: ${{ env.FILE_DATE }}-${{ env.OPENWRT_NAME }}-${{ env.UPLOAD_TAG_NAME }}${{ env.WIFI_VERSION }}${{ env.EEPROM }}${{ env.BUILD_DOCKERMAN }}
         path: ${{ env.FIRMWARE }}
 
-    - name: 生成固件Release标签
+    - name: 生成固件Release标签（修复Git标签非法格式）
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       run: |
@@ -315,7 +310,11 @@ jobs:
         else
                 echo "- 未编译luci-app-dockerman" >> release.txt
         fi
-        echo "release_tag=${{ env.FILE_DATE }}-${{ env.OPENWRT_NAME }}-${{ env.UPLOAD_TAG_NAME }}${{ env.WIFI_VERSION }}${{ env.EEPROM }}${{ env.BUILD_DOCKERMAN }}" >> $GITHUB_OUTPUT
+
+        # 核心修复：标签以v开头，把日期里的.替换为_，完全符合Git Tag规范
+        RAW_TAG="${{ env.FILE_DATE }}-${{ env.OPENWRT_NAME }}-${{ env.UPLOAD_TAG_NAME }}${{ env.WIFI_VERSION }}${{ env.EEPROM }}${{ env.BUILD_DOCKERMAN }}"
+        SAFE_TAG="v_${RAW_TAG//./_}"
+        echo "release_tag=$SAFE_TAG" >> $GITHUB_OUTPUT
         echo "status=success" >> $GITHUB_OUTPUT
 
     - name: 发布固件至Release
@@ -328,3 +327,5 @@ jobs:
         name: ${{ env.FILE_DATE }}-${{ env.OPENWRT_NAME }}-${{ env.UPLOAD_TAG_NAME }}${{ env.WIFI_VERSION }}${{ env.EEPROM }}${{ env.BUILD_DOCKERMAN }}
         tag_name: ${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
+        # 可选：如果标签已存在不报错
+        overwrite: false
