@@ -23,3 +23,7 @@ git clone https://github.com/destan19/OpenAppFilter package/OpenAppFilter
 git clone https://github.com/linkease/istore.git package/luci-app-store
 # 克隆gecoosac插件
 git clone --depth=1 https://github.com/laipeng668/luci-app-gecoosac package/luci-app-gecoosac
+# 下载 wan-mac 修改插件
+git clone --depth=1 https://github.com/linkease/openwrt-app-actions tmp/openwrt-app-actions
+mv tmp/openwrt-app-actions/applications/luci-app-wan-mac package/luci-app-wan-mac
+rm -rf tmp/openwrt-app-actions
