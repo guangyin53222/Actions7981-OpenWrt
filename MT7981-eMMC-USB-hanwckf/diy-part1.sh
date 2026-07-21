@@ -19,3 +19,5 @@
 #git clone https://github.com/sbwml/luci-app-openlist2 package/openlist2
 git clone https://github.com/EasyTier/luci-app-easytier package/easytier
 git clone https://github.com/destan19/OpenAppFilter package/OpenAppFilter
+# istore插件
+git clone https://github.com/linkease/istore.git package/luci-app-store
