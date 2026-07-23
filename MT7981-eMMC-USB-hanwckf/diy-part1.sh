@@ -27,13 +27,7 @@ git clone --depth=1 https://github.com/laipeng668/luci-app-gecoosac package/luci
 git clone --depth=1 https://github.com/linkease/openwrt-app-actions tmp/openwrt-app-actions
 mv tmp/openwrt-app-actions/applications/luci-app-wan-mac package/luci-app-wan-mac
 rm -rf tmp/openwrt-app-actions
-# Bandix-plus 流量监控：后端核心程序
-#git clone --depth=1 https://github.com/timsaya/openwrt-bandix-plus package/openwrt-bandix-plus
-# Bandix-plus 流量监控：LuCI前端界面
-#git clone --depth=1 https://github.com/timsaya/luci-app-bandix-plus package/luci-app-bandix-plus
-# 在openwrt根目录执行
-#git clone https://github.com/timsaya/openwrt-bandix.git package/openwrt-bandix
-#git clone https://github.com/timsaya/luci-app-bandix.git package/luci-app-bandix
+#
 echo >> feeds.conf.default
 echo 'src-git nas https://github.com/linkease/nas-packages.git;master' >> feeds.conf.default
 echo 'src-git nas_luci https://github.com/linkease/nas-packages-luci.git;main' >> feeds.conf.default
