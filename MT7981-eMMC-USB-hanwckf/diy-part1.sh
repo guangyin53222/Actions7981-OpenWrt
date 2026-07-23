@@ -10,19 +10,11 @@
 # Description: OpenWrt DIY script part 1 (Before Update feeds)
 #!/bin/bash
 # 加载files自定义配置文件
-#if [ -d "$GITHUB_WORKSPACE/files" ]; then
-#    cp -r $GITHUB_WORKSPACE/files openwrt/
-#fi
-
-# 新增：集成易有云LinkEase
-echo "src-git nas https://github.com/linkease/nas-packages.git;master" >> feeds.conf.default
-./scripts/feeds update nas
-./scripts/feeds install luci-app-linkease
-
-
+if [ -d "$GITHUB_WORKSPACE/files" ]; then
+    cp -r $GITHUB_WORKSPACE/files openwrt/
+fi
 # Uncomment a feed source
 #sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
-
 # Add a feed source
 #echo 'src-git helloworld https://github.com/fw876/helloworld' >>feeds.conf.default
 #echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall' >>feeds.conf.default
@@ -37,13 +29,6 @@ git clone --depth=1 https://github.com/laipeng668/luci-app-gecoosac package/luci
 git clone --depth=1 https://github.com/linkease/openwrt-app-actions tmp/openwrt-app-actions
 mv tmp/openwrt-app-actions/applications/luci-app-wan-mac package/luci-app-wan-mac
 rm -rf tmp/openwrt-app-actions
-#
-echo >> feeds.conf.default
-echo 'src-git nas https://github.com/linkease/nas-packages.git;master' >> feeds.conf.default
-echo 'src-git nas_luci https://github.com/linkease/nas-packages-luci.git;main' >> feeds.conf.default
-./scripts/feeds update nas nas_luci
-./scripts/feeds install -a -p nas
-./scripts/feeds install -a -p nas_luci
 # 添加 luci-app-tcpdump 抓包插件
 git clone https://github.com/KFERMercer/luci-app-tcpdump.git ./package/luci-app-tcpdump
 # 更新并安装插件源
