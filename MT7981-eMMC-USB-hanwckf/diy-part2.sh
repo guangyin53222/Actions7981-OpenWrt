@@ -8,10 +8,11 @@
 # https://github.com/P3TERX/Actions-OpenWrt
 # File name: diy-part2.sh
 # Description: OpenWrt DIY script part 2 (After Update feeds)
-#
-
 # Modify default IP
 sed -i 's/192.168.1.1/192.168.100.1/g' package/base-files/files/bin/config_generate
+# Modify default theme
+sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
+sed -i 's/ImmortalWrt/ARWRT/g' package/base-files/files/bin/config_generate
 ##-----------------Del duplicate packages------------------
 rm -rf feeds/packages/net/open-app-filter
 ##-----------------Add OpenClash meta core------------------
