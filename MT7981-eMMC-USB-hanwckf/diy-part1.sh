@@ -10,9 +10,9 @@
 # Description: OpenWrt DIY script part 1 (Before Update feeds)
 #!/bin/bash
 # 加载files自定义配置文件
-if [ -d "$GITHUB_WORKSPACE/files" ]; then
-    cp -r $GITHUB_WORKSPACE/files openwrt/
-fi
+#if [ -d "$GITHUB_WORKSPACE/files" ]; then
+#    cp -r $GITHUB_WORKSPACE/files openwrt/
+#fi
 
 # 新增：集成易有云LinkEase
 echo "src-git nas https://github.com/linkease/nas-packages.git;master" >> feeds.conf.default
