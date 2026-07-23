@@ -34,3 +34,14 @@ rm -rf tmp/openwrt-app-actions
 # 在openwrt根目录执行
 #git clone https://github.com/timsaya/openwrt-bandix.git package/openwrt-bandix
 #git clone https://github.com/timsaya/luci-app-bandix.git package/luci-app-bandix
+echo >> feeds.conf.default
+echo 'src-git nas https://github.com/linkease/nas-packages.git;master' >> feeds.conf.default
+echo 'src-git nas_luci https://github.com/linkease/nas-packages-luci.git;main' >> feeds.conf.default
+./scripts/feeds update nas nas_luci
+./scripts/feeds install -a -p nas
+./scripts/feeds install -a -p nas_luci
+# 添加 luci-app-tcpdump 抓包插件
+git clone https://github.com/KFERMercer/luci-app-tcpdump.git ./package/luci-app-tcpdump
+# 更新并安装插件源
+./scripts/feeds update -a
+./scripts/feeds install -a
