@@ -8,7 +8,17 @@
 # https://github.com/P3TERX/Actions-OpenWrt
 # File name: diy-part1.sh
 # Description: OpenWrt DIY script part 1 (Before Update feeds)
-#
+#!/bin/bash
+# 加载files自定义配置文件
+if [ -d "$GITHUB_WORKSPACE/files" ]; then
+    cp -r $GITHUB_WORKSPACE/files openwrt/
+fi
+
+# 新增：集成易有云LinkEase
+echo "src-git nas https://github.com/linkease/nas-packages.git;master" >> feeds.conf.default
+./scripts/feeds update nas
+./scripts/feeds install luci-app-linkease
+
 
 # Uncomment a feed source
 #sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
