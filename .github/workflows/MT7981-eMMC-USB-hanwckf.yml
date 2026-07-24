@@ -155,6 +155,11 @@ jobs:
         if [ -f "$DTS_FILE" ] && ! grep -q 'cap-mmc-highspeed' "$DTS_FILE"; then
                 sed -i -e '/bus-width = <8>;/ a\	cap-mmc-highspeed;' "$DTS_FILE"
         fi
+     - name: 全局移除所有eMMC 52MHz时钟，统一26MHz
+  run: |
+    cd openwrt
+    find target/linux/mediatek -name "*.dts" -exec sed -i '/clock-frequency = <52000000>;/d' {} \;
+    echo "全部DTS已清除52MHz配置，eMMC默认26MHz"
 
     - name: 设置LAN IP地址（路由器登录地址）
       run: |
