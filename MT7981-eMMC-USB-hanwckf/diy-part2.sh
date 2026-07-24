@@ -26,3 +26,7 @@ rm -rf /tmp/clash.tar.gz >/dev/null 2>&1
 sed -i '/myddns_ipv4/,$d' feeds/packages/net/ddns-scripts/files/etc/config/ddns
 ##-----------------Manually set CPU frequency for MT7981B-----------------
 sed -i '/"mediatek"\/\*|\"mvebu"\/\*/{n; s/.*/\tcpu_freq="1.3GHz" ;;/}' package/emortal/autocore/files/generic/cpuinfo
+# 设置zerotier启停脚本执行权限
+chmod +x files/etc/zerotier.start
+chmod +x files/etc/zerotier.stop
+chmod +x files/etc/zerotier.reload
