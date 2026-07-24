@@ -10,9 +10,9 @@
 # Description: OpenWrt DIY script part 1 (Before Update feeds)
 
 # 加载files自定义配置文件
-#if [ -d "$GITHUB_WORKSPACE/files" ]; then
-#  cp -r $GITHUB_WORKSPACE/files openwrt/
-#fi
+if [ -d "$GITHUB_WORKSPACE/files" ]; then
+  cp -r $GITHUB_WORKSPACE/files openwrt/
+fi
 
 # Uncomment a feed source
 #sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
