@@ -8,9 +8,12 @@
 # https://github.com/P3TERX/Actions-OpenWrt
 # File name: diy-part1.sh
 # Description: OpenWrt DIY script part 1 (Before Update feeds)
-# 启用files自定义配置文件（files大法，取消注释）
-if [ -d "$GITHUB_WORKSPACE/files" ]; then
-  cp -r $GITHUB_WORKSPACE/files openwrt/
+# Files适配当前机型文件夹内files路径
+if [ -d "$GITHUB_WORKSPACE/MT7981-eMMC-USB-hanwckf/files" ]; then
+  cp -r $GITHUB_WORKSPACE/MT7981-eMMC-USB-hanwckf/files openwrt/
+  echo " 文件复制完成"
+else
+  echo " 找不到files目录，请核对路径"
 fi
 # Uncomment a feed source
 #sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
