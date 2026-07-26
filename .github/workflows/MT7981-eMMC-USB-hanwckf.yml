@@ -61,6 +61,11 @@ on:
         required: true
         default: false
         type: boolean
+      FILES_FIX:
+        description: '启用Files目录覆盖（Files大法）'
+        required: true
+        default: true
+        type: boolean
       ssh:
         description: 'SSH connection to Actions'
         required: false
@@ -79,6 +84,7 @@ env:
   CONFIG_FILE: MT7981-eMMC-USB-hanwckf/.mtwifi-cfg.config
   DIY_P1_SH: MT7981-eMMC-USB-hanwckf/diy-part1.sh
   DIY_P2_SH: MT7981-eMMC-USB-hanwckf/diy-part2.sh
+  FILES_PATH: MT7981-eMMC-USB-hanwckf/files
   SSH_ACTIONS: false
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
@@ -130,6 +136,18 @@ jobs:
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+
+    - name: Files大法 - 复制自定义文件到源码files目录
+      if: github.event.inputs.FILES_FIX == 'true'
+      run: |
+        if [ -d "${{ env.FILES_PATH }}" ];then
+          mkdir -p openwrt/files
+          cp -r ${{ env.FILES_PATH }}/* openwrt/files/
+          echo "✅ Files目录复制完成：${{ env.FILES_PATH }} --> openwrt/files/"
+          ls -la openwrt/files/
+        else
+          echo "⚠️ 未检测到files文件夹 ${{ env.FILES_PATH }}"
+        fi
 
     - name: 加载feeds.conf.default & DIY_P1_SH
       run: |
@@ -314,6 +332,11 @@ jobs:
                 echo "- 已编译luci-app-dockerman" >> release.txt
         else
                 echo "- 未编译luci-app-dockerman" >> release.txt
+        fi
+        if [[ "${{ github.event.inputs.FILES_FIX }}" == 'true' ]]; then
+               echo "- ✅ 启用Files自定义文件覆盖" >> release.txt
+        else
+               echo "- ❌ 关闭Files自定义文件覆盖" >> release.txt
         fi
         echo "release_tag=${{ env.FILE_DATE }}-${{ env.OPENWRT_NAME }}-${{ env.UPLOAD_TAG_NAME }}${{ env.WIFI_VERSION }}${{ env.EEPROM }}${{ env.BUILD_DOCKERMAN }}" >> $GITHUB_OUTPUT
         echo "status=success" >> $GITHUB_OUTPUT
